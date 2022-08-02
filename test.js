@@ -1,5 +1,3 @@
-const { crearArchivo, renombrarArchivo, moverArchivo, eliminarArchivo } = require('./fs-script.js');
-
 const rootPath = 'C:\\code\\test'
 let content = '<!--Test-->\n<div>\n\t<p>Este es el texto del archivo</p>\n</div>\n';
 let nombreFile = 'archivo.html';
