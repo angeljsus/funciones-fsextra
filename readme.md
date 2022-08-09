@@ -2,7 +2,38 @@
 
 ### Requerimientos
 
-Requiere la instalación previa de `fs-extra` y `path`.
+- Requiere la instalación previa de `fs-extra` y `path`.
+- Requiere el archivo `ConstantesNode.tsx` para importar y definir constantes de módulos de node instalados, solo para tener un orden y siempre utilizar acceder por medio del nombre de las constantes.
+
+### Habilitar uso de módulos de Node en proyecto Vite-React-Electron
+
+Una vez instalados los módulos de node que utilizará la aplicación, los registramos para acceder a ellos mediante el objeto `window`. Esto se realiza sobre el archivo `./electron/preload.js`
+
+```typescript
+// ./electron/preload.ts
+
+// verificar que exista la función contextBridge(), de lo contrario agregar de la importación
+import { ipcRenderer, contextBridge } from 'electron';
+
+// importar la librería de node
+import fs from 'fs-extra';
+import path from 'path';
+
+// exponerla en la aplicación
+contextBridge.exposeInMainWorld('fs', fs);
+contextBridge.exposeInMainWorld('path', path);
+
+
+declare global {
+  interface Window {
+    Main: typeof api;
+    ipcRenderer: typeof ipcRenderer;
+    // agregar la palabra reservada para acceder desde los archivos
+    fs : typeof import('fs-extra')
+    path : typeof import('path')
+  }
+}
+```
 
 ### `crearArchivo(nombreArchivo, contenidoArchivo, rutaAlmacenamiento)`
 
@@ -15,7 +46,7 @@ La función crea un archivo de cualquier tipo con el contenido que sea requerido
 - **rutaAlmacenamiento** (*string* *): ruta completa del `directorio` donde se almacenará el archivo.
 
 ##### Resultados
-```javascript
+```typescript
 crearArchivo('test.js', 'let texto = esta es una prueba; ', 'C:/etc/fold')
     .then(function(realPath){
         console.log(realPath) // resultado: C:/etc/fold/test.js
@@ -34,7 +65,7 @@ La función modifica el nombre del archivo o de un directorio.
 -  **nuevoNombre** (*string* *): nombre que tomará el archivo o directorio.
 
 ##### Resultados
-```javascript
+```typescript
 renombrarArchivo('C:/etc/fold/test.js', 'prueba1.txt')
     .then(function(realPath){
         console.log(realPath) // resultado: C:/etc/fold/prueba1.txt
@@ -51,7 +82,7 @@ La función mueve el archivo o directorio hacia otro lugar de almacenamiento.
 - **destino** (*string* *): ruta completa del directorio donde se moverá el archivo.
 
 ##### Resultados
-```javascript
+```typescript
 moverArchivo('C:/etc/fold/prueba1.txt', 'C:/documentos/pruebas')
     .then(function(realPath){
         console.log(realPath) // resultado: C:/documentos/pruebas/prueba1.txt
@@ -68,7 +99,7 @@ La función elimina el archivo o directorio envíado por parámetro.
 - **rutaArchivo** (*string* *): ruta completa donde se encuentra el archivo que se desea eliminar.
 
 ##### Resultados
-```javascript
+```typescript
 eliminarArchivo('C:/documentos/pruebas/prueba1.txt')
     .then(function(realPath){
         console.log('Se elimino: ',realPath) // resultado: Se elimino: C:/documentos/pruebas/prueba1.txt

@@ -1,9 +1,6 @@
-'use strict';
+import { fs, path } from './ConstantesNode';  
 
-const fs =  require('fs-extra');
-const path =  require('path');
-
-function crearArchivo(nombreArchivo, contenidoArchivo, rutaAlmacenamiento){
+export function crearArchivo(nombreArchivo, contenidoArchivo, rutaAlmacenamiento){
 	const realPath = path.join(rutaAlmacenamiento, nombreArchivo);
 	return new Promise(function(resolve, reject){
 		fs.outputFile(realPath, contenidoArchivo)
@@ -16,7 +13,7 @@ function crearArchivo(nombreArchivo, contenidoArchivo, rutaAlmacenamiento){
 	})
 }
 
-function renombrarArchivo(rutaArchivo, nuevoNombre){
+export function renombrarArchivo(rutaArchivo, nuevoNombre){
 	let realNewPath = path.join(path.dirname(rutaArchivo), nuevoNombre);
 	return new Promise(function(resolve, reject){
 		fs.rename(rutaArchivo, realNewPath)
@@ -29,7 +26,7 @@ function renombrarArchivo(rutaArchivo, nuevoNombre){
 	})
 }
 
-function moverArchivo(rutaArchivo, destino){
+export function moverArchivo(rutaArchivo, destino){
 	let realNewPath = path.join(destino, path.basename(rutaArchivo));
 	return new Promise(function(resolve, reject){
 		fs.move(rutaArchivo, realNewPath, { overwrite: true })
@@ -42,7 +39,7 @@ function moverArchivo(rutaArchivo, destino){
 	})
 }
 
-function eliminarArchivo(rutaArchivo){
+export function eliminarArchivo(rutaArchivo){
 	return new Promise(function(resolve, reject){
 		fs.remove(rutaArchivo)
 			.then(function(){
