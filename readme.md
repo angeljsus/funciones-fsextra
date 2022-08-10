@@ -108,3 +108,27 @@ eliminarArchivo('C:/documentos/pruebas/prueba1.txt')
         console.error(err); // throw callback message.
     })
 ```
+
+### `moverDesdeInput(nombreInput, nuevoNombre)`
+##### Descripción
+La función mueve el archivo seleccionado desde el input y lo almacena dentro de la ruta almacenada dentro de la función.
+##### Parámetros
+- **nombreInput** (*string* *): nombre de la variable `useRef` que hace referencia al input dentro del componente.
+- **nuevoNombre** (*string* *): nombre que tomara el archivo, puede ir con extensión `file.txt` o sin ella `file` si no trae la extensión tomará la del archivo seleccionado. 
+
+
+##### Resultados
+```typescript
+const inputRef = useRef(null); // objeto ref
+
+moverDesdeInput(inputRef, 'nuevoNombre.js')
+    .then(function(res){
+        // si el input tiene archivo seleccionado 
+        console.log(res) // D:/code/almacenamiento/nuevoNombre.js
+        // si el input NO tiene archivo seleccionado 
+        console.log(res) // false
+    })
+    .catch(function(err){
+        console.error(err); // throw callback message.
+    })
+```
